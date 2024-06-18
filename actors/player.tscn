@@ -1,0 +1,59 @@
+[gd_scene load_steps=7 format=3 uid="uid://bu3cph7fwg32a"]
+
+[ext_resource type="Script" path="res://scripts/Player.gd" id="1_s6u3k"]
+[ext_resource type="PackedScene" uid="uid://bcyuu5b3vy8w8" path="res://scenes/warrior_sprite.tscn" id="2_264rq"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_3y7w3"]
+radius = 9.0
+height = 36.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_qo7du"]
+radius = 39.0
+height = 82.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bgvcg"]
+bg_color = Color(0.044204, 0.239711, 2.40654e-08, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vn7r6"]
+bg_color = Color(0.166288, 0.782812, 3.85046e-07, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[node name="Player" type="CharacterBody2D"]
+script = ExtResource("1_s6u3k")
+speed = 500.0
+
+[node name="WarriorSprite" parent="." instance=ExtResource("2_264rq")]
+unique_name_in_owner = true
+position = Vector2(0, -30)
+frame = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+rotation = -1.57079
+shape = SubResource("CapsuleShape2D_3y7w3")
+
+[node name="HurtBox" type="Area2D" parent="."]
+unique_name_in_owner = true
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox"]
+position = Vector2(0, -28)
+shape = SubResource("CapsuleShape2D_qo7du")
+
+[node name="ProgressBar" type="ProgressBar" parent="."]
+unique_name_in_owner = true
+offset_left = -69.0
+offset_top = 17.0
+offset_right = 73.0
+offset_bottom = 30.0
+theme_override_styles/background = SubResource("StyleBoxFlat_bgvcg")
+theme_override_styles/fill = SubResource("StyleBoxFlat_vn7r6")
+value = 50.0
+show_percentage = false

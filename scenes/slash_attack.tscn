@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://c5728tbnsyw7h"]
+
+[ext_resource type="Script" path="res://scripts/slash_attack.gd" id="1_guj5k"]
+[ext_resource type="PackedScene" uid="uid://cei7whgjsctsg" path="res://scenes/slash_sprite.tscn" id="2_wcd1r"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_17ou3"]
+radius = 201.249
+
+[node name="SlashAttack" type="Area2D"]
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("1_guj5k")
+slash_sprite = ExtResource("2_wcd1r")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_17ou3")
+
+[node name="Timer" type="Timer" parent="."]
+autostart = true
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
