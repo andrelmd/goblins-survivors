@@ -1,0 +1,84 @@
+[gd_scene load_steps=10 format=3 uid="uid://c67v33wb2x76j"]
+
+[ext_resource type="Script" path="res://uis/stats.gd" id="1_0ckpo"]
+[ext_resource type="PackedScene" uid="uid://c3dmk61v4k7u8" path="res://uis/banner.tscn" id="1_nb1fe"]
+[ext_resource type="Texture2D" uid="uid://c26201nwuxrll" path="res://addons/Tiny Swords/UI/Ribbons/Ribbon_Yellow_3Slides.png" id="3_wxlor"]
+[ext_resource type="Texture2D" uid="uid://deysycm8nmc8n" path="res://addons/Tiny Swords/Resources/Resources/G_Idle_(NoShadow).png" id="4_5b1bg"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_cnvif"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_wj504"]
+load_path = "res://.godot/imported/Ribbon_Red_3Slides.png-dc0064da7d595602afc71f602fe8a40f.ctex"
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_oa2pa"]
+texture = SubResource("CompressedTexture2D_wj504")
+texture_margin_left = 40.0
+axis_stretch_horizontal = 2
+region_rect = Rect2(32, 0, 160, 64)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_git62"]
+texture = ExtResource("3_wxlor")
+texture_margin_left = 40.0
+axis_stretch_horizontal = 2
+region_rect = Rect2(32, 0, 160, 64)
+
+[sub_resource type="LabelSettings" id="LabelSettings_i0sgw"]
+font_size = 13
+font_color = Color(0, 0, 0, 1)
+
+[node name="Stats" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_0ckpo")
+
+[node name="Banner" parent="." instance=ExtResource("1_nb1fe")]
+layout_mode = 0
+offset_left = 16.0
+offset_top = 511.0
+offset_right = 276.0
+offset_bottom = 639.0
+
+[node name="HealthBar" type="ProgressBar" parent="Banner"]
+layout_mode = 1
+offset_left = 30.0
+offset_top = 11.0
+offset_right = 233.0
+offset_bottom = 37.0
+theme_override_styles/background = SubResource("StyleBoxEmpty_cnvif")
+theme_override_styles/fill = SubResource("StyleBoxTexture_oa2pa")
+value = 1.0
+show_percentage = false
+
+[node name="ExpBar" type="ProgressBar" parent="Banner"]
+layout_mode = 0
+offset_left = 26.0
+offset_top = 77.0
+offset_right = 229.0
+offset_bottom = 97.0
+theme_override_styles/background = SubResource("StyleBoxEmpty_cnvif")
+theme_override_styles/fill = SubResource("StyleBoxTexture_git62")
+value = 1.0
+show_percentage = false
+
+[node name="Goldtexture" type="TextureRect" parent="Banner"]
+layout_mode = 0
+offset_left = 15.0
+offset_top = 21.0
+offset_right = 135.0
+offset_bottom = 80.0
+texture = ExtResource("4_5b1bg")
+expand_mode = 3
+stretch_mode = 4
+
+[node name="GoldCounter" type="Label" parent="Banner"]
+layout_mode = 0
+offset_left = 59.0
+offset_top = 46.0
+offset_right = 115.0
+offset_bottom = 80.0
+text = "9999"
+label_settings = SubResource("LabelSettings_i0sgw")

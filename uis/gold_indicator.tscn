@@ -1,0 +1,57 @@
+[gd_scene load_steps=5 format=3 uid="uid://ddfsom6acrfer"]
+
+[ext_resource type="Script" path="res://uis/gold_indicator.gd" id="1_1gljk"]
+[ext_resource type="PackedScene" uid="uid://c3dmk61v4k7u8" path="res://uis/banner.tscn" id="2_bqggh"]
+[ext_resource type="Texture2D" uid="uid://deysycm8nmc8n" path="res://addons/Tiny Swords/Resources/Resources/G_Idle_(NoShadow).png" id="2_usjn2"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_m81q3"]
+font_size = 24
+font_color = Color(0, 0, 0, 1)
+
+[node name="GoldIndicator" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_1gljk")
+
+[node name="Banner" parent="." instance=ExtResource("2_bqggh")]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -236.0
+offset_top = 21.0
+offset_right = -27.0
+offset_bottom = 129.0
+grow_horizontal = 0
+
+[node name="Goldtexture" type="TextureRect" parent="Banner"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = -1.0
+offset_top = -88.0
+offset_right = 127.0
+offset_bottom = 40.0
+grow_vertical = 2
+texture = ExtResource("2_usjn2")
+
+[node name="GoldCounter" type="Label" parent="Banner"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -107.0
+offset_top = -27.0
+offset_right = -37.0
+offset_bottom = 11.0
+grow_horizontal = 0
+grow_vertical = 2
+text = "9999"
+label_settings = SubResource("LabelSettings_m81q3")

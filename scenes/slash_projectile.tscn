@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3 uid="uid://1d6c2y4qnt5l"]
+
+[ext_resource type="Script" path="res://scripts/slash_projectile.gd" id="1_3nnbg"]
+[ext_resource type="Texture2D" uid="uid://c07kn77otv5i" path="res://addons/kenney_particle-pack/PNG (Transparent)/slash_03.png" id="1_cbbxi"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_qepeq"]
+radius = 26.0
+height = 154.0
+
+[node name="SlashProjectile" type="Node2D"]
+script = ExtResource("1_3nnbg")
+
+[node name="SlashSprite" type="Sprite2D" parent="."]
+scale = Vector2(0.7, 0.4)
+texture = ExtResource("1_cbbxi")
+
+[node name="SlashDamageArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SlashDamageArea"]
+position = Vector2(16, 4)
+shape = SubResource("CapsuleShape2D_qepeq")
+
+[connection signal="body_entered" from="SlashDamageArea" to="." method="_on_slash_damage_area_body_entered"]

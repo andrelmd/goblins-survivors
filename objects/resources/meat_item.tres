@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="Item" load_steps=3 format=3 uid="uid://cml5ig8vv2oag"]
+
+[ext_resource type="Script" path="res://objects/resources/item.gd" id="1_lb3pn"]
+[ext_resource type="Texture2D" uid="uid://d0b1lhk1g0d8o" path="res://addons/Tiny Swords/Resources/Resources/M_Idle_(NoShadow).png" id="2_dghqb"]
+
+[resource]
+script = ExtResource("1_lb3pn")
+display_name = "Carne"
+texture = ExtResource("2_dghqb")
