@@ -1,0 +1,82 @@
+[gd_scene load_steps=7 format=3 uid="uid://dxve66a6b2rvd"]
+
+[ext_resource type="Texture2D" uid="uid://bv4gg7mx7v81x" path="res://addons/kenney_particle-pack/PNG (Transparent)/circle_02.png" id="1_5uhfi"]
+[ext_resource type="Script" path="res://effects/level_up_effect.gd" id="1_es27d"]
+[ext_resource type="Texture2D" uid="uid://ddb0jc6bqihes" path="res://addons/kenney_particle-pack/PNG (Transparent)/circle_01.png" id="2_y7802"]
+
+[sub_resource type="Animation" id="Animation_7i2gy"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1e-05, 1e-05)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("1_5uhfi")]
+}
+
+[sub_resource type="Animation" id="Animation_l4vpx"]
+resource_name = "level_up"
+length = 1.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.7, 1.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1e-05, 1e-05), Vector2(1.3, 1.3), Vector2(1e-05, 1e-05)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.7),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [ExtResource("2_y7802"), ExtResource("1_5uhfi")]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_xiyxm"]
+_data = {
+"RESET": SubResource("Animation_7i2gy"),
+"level_up": SubResource("Animation_l4vpx")
+}
+
+[node name="LevelUpEffect" type="Node2D"]
+script = ExtResource("1_es27d")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(0.293096, 0.647275, 0.918709, 1)
+scale = Vector2(1e-05, 1e-05)
+texture = ExtResource("1_5uhfi")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_xiyxm")
+}
+autoplay = "level_up"
+
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]

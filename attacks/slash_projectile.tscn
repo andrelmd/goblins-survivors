@@ -1,0 +1,71 @@
+[gd_scene load_steps=9 format=3 uid="uid://m3hav63u1tln"]
+
+[ext_resource type="PackedScene" uid="uid://fgh21fr1maed" path="res://components/attack_component.tscn" id="1_pn2rv"]
+[ext_resource type="Script" path="res://attacks/slash_projectile.gd" id="1_rydsf"]
+[ext_resource type="Texture2D" uid="uid://yo07u18u4qll" path="res://addons/kenney_particle-pack/PNG (Transparent)/slash_01.png" id="2_oca3d"]
+[ext_resource type="Texture2D" uid="uid://dmwmfiy02bujw" path="res://addons/kenney_particle-pack/PNG (Transparent)/slash_02.png" id="3_i1s7e"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jnf14"]
+size = Vector2(110, 292)
+
+[sub_resource type="Animation" id="Animation_f42cq"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("2_oca3d")]
+}
+
+[sub_resource type="Animation" id="Animation_04a5c"]
+resource_name = "attack"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [ExtResource("2_oca3d"), ExtResource("3_i1s7e")]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_71bvl"]
+_data = {
+"RESET": SubResource("Animation_f42cq"),
+"attack": SubResource("Animation_04a5c")
+}
+
+[node name="SlashProjectile" type="Node2D" groups=["player"]]
+scale = Vector2(0.5, 0.5)
+script = ExtResource("1_rydsf")
+max_distance = 300.0
+speed = 1000.0
+
+[node name="AttackComponent" parent="." node_paths=PackedStringArray("attack") instance=ExtResource("1_pn2rv")]
+damage = 5.0
+attack = NodePath("..")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackComponent"]
+position = Vector2(-17, 5)
+shape = SubResource("RectangleShape2D_jnf14")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(1, 1, 0.45098, 1)
+position = Vector2(-119, 0)
+rotation = -1.5708
+texture = ExtResource("2_oca3d")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Sprite2D"]
+libraries = {
+"": SubResource("AnimationLibrary_71bvl")
+}

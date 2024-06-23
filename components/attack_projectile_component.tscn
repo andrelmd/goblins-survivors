@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3 uid="uid://c5728tbnsyw7h"]
+
+[ext_resource type="Script" path="res://scripts/attack_projectile_component.gd" id="1_v558o"]
+[ext_resource type="Script" path="res://scripts/spawn_component.gd" id="2_fg0n3"]
+[ext_resource type="PackedScene" uid="uid://m3hav63u1tln" path="res://attacks/slash_projectile.tscn" id="3_rx3mg"]
+
+[node name="AttackProjectileComponent" type="Area2D" node_paths=PackedStringArray("spawner")]
+monitorable = false
+script = ExtResource("1_v558o")
+spawner = NodePath("SpawnComponent")
+
+[node name="AttackCooldown" type="Timer" parent="."]
+autostart = true
+
+[node name="SpawnComponent" type="Node2D" parent="." node_paths=PackedStringArray("attack_projectile_component")]
+script = ExtResource("2_fg0n3")
+entity = ExtResource("3_rx3mg")
+attack_projectile_component = NodePath("..")
+
+[connection signal="timeout" from="AttackCooldown" to="." method="_on_timer_timeout"]

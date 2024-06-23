@@ -1,0 +1,58 @@
+[gd_scene load_steps=10 format=3 uid="uid://dpsnl6bxp3ar7"]
+
+[ext_resource type="Script" path="res://scripts/TorchGoblin.gd" id="1_7uxm1"]
+[ext_resource type="PackedScene" uid="uid://b5ibkxo0gtusj" path="res://objects/pickups/pickup_meat.tscn" id="2_gj13u"]
+[ext_resource type="PackedScene" uid="uid://4yxgwug2ul81" path="res://scenes/torch_goblin_sprite.tscn" id="3_s3j8g"]
+[ext_resource type="Script" path="res://scripts/HealthComponent.gd" id="4_6tjlj"]
+[ext_resource type="PackedScene" uid="uid://vbu0jy7dvl7p" path="res://components/hurt_box_component.tscn" id="5_haf71"]
+[ext_resource type="PackedScene" uid="uid://fgh21fr1maed" path="res://components/attack_component.tscn" id="6_qmbqs"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ibofb"]
+radius = 18.0
+height = 72.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_46f26"]
+radius = 36.0
+height = 76.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_2v1kt"]
+radius = 46.1736
+
+[node name="TorchGoblinBig" type="CharacterBody2D" groups=["enemy"]]
+scale = Vector2(2, 2)
+motion_mode = 1
+script = ExtResource("1_7uxm1")
+speed = 30.0
+drop_table = Array[PackedScene]([ExtResource("2_gj13u")])
+gold_value = 20
+exp_value = 30
+
+[node name="TorchGoblinSprite" parent="." instance=ExtResource("3_s3j8g")]
+unique_name_in_owner = true
+position = Vector2(0, -32)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -33)
+shape = SubResource("CapsuleShape2D_ibofb")
+
+[node name="HealthComponent" type="Node" parent="."]
+script = ExtResource("4_6tjlj")
+max_health = 20.0
+
+[node name="HurtBoxComponent" parent="." node_paths=PackedStringArray("health_component") instance=ExtResource("5_haf71")]
+health_component = NodePath("../HealthComponent")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBoxComponent"]
+position = Vector2(0, -33)
+shape = SubResource("CapsuleShape2D_46f26")
+
+[node name="AttackComponent" parent="." instance=ExtResource("6_qmbqs")]
+damage = 10.0
+is_damage_over_time = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackComponent"]
+position = Vector2(0, -29)
+shape = SubResource("CircleShape2D_2v1kt")
+
+[connection signal="damage_taken" from="HealthComponent" to="." method="_on_health_component_damage_taken"]
+[connection signal="health_depleted" from="HealthComponent" to="." method="_on_health_component_health_depleted"]

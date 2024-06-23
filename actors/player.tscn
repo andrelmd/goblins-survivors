@@ -1,59 +1,63 @@
-[gd_scene load_steps=7 format=3 uid="uid://bu3cph7fwg32a"]
+[gd_scene load_steps=12 format=3 uid="uid://bu3cph7fwg32a"]
 
 [ext_resource type="Script" path="res://scripts/Player.gd" id="1_s6u3k"]
 [ext_resource type="PackedScene" uid="uid://bcyuu5b3vy8w8" path="res://scenes/warrior_sprite.tscn" id="2_264rq"]
+[ext_resource type="Resource" uid="uid://cml5ig8vv2oag" path="res://objects/resources/meat_item.tres" id="2_dup2k"]
+[ext_resource type="Script" path="res://scripts/HealthComponent.gd" id="3_00s0g"]
+[ext_resource type="Texture2D" uid="uid://cojnookbuy6qo" path="res://addons/Tiny Swords/Factions/Knights/Troops/Warrior/Blue/Warrior_Blue.png" id="4_62f7a"]
+[ext_resource type="PackedScene" uid="uid://vbu0jy7dvl7p" path="res://components/hurt_box_component.tscn" id="4_4450g"]
+[ext_resource type="PackedScene" uid="uid://y7gh2ujqtwm7" path="res://components/inventory_component.tscn" id="6_4tkru"]
+[ext_resource type="PackedScene" uid="uid://c5728tbnsyw7h" path="res://components/attack_projectile_component.tscn" id="7_pjp5n"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_3y7w3"]
-radius = 9.0
-height = 36.0
+radius = 20.0
+height = 60.0
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_qo7du"]
-radius = 39.0
-height = 82.0
+[sub_resource type="CircleShape2D" id="CircleShape2D_4bp1s"]
+radius = 46.0977
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bgvcg"]
-bg_color = Color(0.044204, 0.239711, 2.40654e-08, 1)
-corner_radius_top_left = 8
-corner_radius_top_right = 8
-corner_radius_bottom_right = 8
-corner_radius_bottom_left = 8
+[sub_resource type="CircleShape2D" id="CircleShape2D_d7ndt"]
+radius = 300.0
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vn7r6"]
-bg_color = Color(0.166288, 0.782812, 3.85046e-07, 1)
-corner_radius_top_left = 8
-corner_radius_top_right = 8
-corner_radius_bottom_right = 8
-corner_radius_bottom_left = 8
-
-[node name="Player" type="CharacterBody2D"]
+[node name="Player" type="CharacterBody2D" groups=["player"]]
+motion_mode = 1
 script = ExtResource("1_s6u3k")
+health_items = Array[Resource("res://objects/resources/item.gd")]([ExtResource("2_dup2k")])
 speed = 500.0
 
 [node name="WarriorSprite" parent="." instance=ExtResource("2_264rq")]
 unique_name_in_owner = true
 position = Vector2(0, -30)
-frame = 1
+texture = ExtResource("4_62f7a")
+hframes = 6
+vframes = 8
+frame = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-rotation = -1.57079
+position = Vector2(0, -28)
+rotation = -3.14159
 shape = SubResource("CapsuleShape2D_3y7w3")
 
-[node name="HurtBox" type="Area2D" parent="."]
-unique_name_in_owner = true
-collision_layer = 0
-collision_mask = 2
+[node name="HealthComponent" type="Node" parent="."]
+script = ExtResource("3_00s0g")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox"]
+[node name="HurtBoxComponent" parent="." node_paths=PackedStringArray("health_component") instance=ExtResource("4_4450g")]
+unique_name_in_owner = true
+health_component = NodePath("../HealthComponent")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBoxComponent"]
 position = Vector2(0, -28)
-shape = SubResource("CapsuleShape2D_qo7du")
+shape = SubResource("CircleShape2D_4bp1s")
 
-[node name="ProgressBar" type="ProgressBar" parent="."]
-unique_name_in_owner = true
-offset_left = -69.0
-offset_top = 17.0
-offset_right = 73.0
-offset_bottom = 30.0
-theme_override_styles/background = SubResource("StyleBoxFlat_bgvcg")
-theme_override_styles/fill = SubResource("StyleBoxFlat_vn7r6")
-value = 50.0
-show_percentage = false
+[node name="InventoryComponent" parent="." instance=ExtResource("6_4tkru")]
+
+[node name="AttackProjectileComponent" parent="." instance=ExtResource("7_pjp5n")]
+position = Vector2(0, -28)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackProjectileComponent"]
+shape = SubResource("CircleShape2D_d7ndt")
+
+[connection signal="damage_taken" from="HealthComponent" to="." method="_on_health_component_damage_taken"]
+[connection signal="health_depleted" from="HealthComponent" to="." method="_on_health_component_health_depleted"]
+[connection signal="health_recovered" from="HealthComponent" to="." method="_on_health_component_health_recovered"]
+[connection signal="inventory_item_changed" from="InventoryComponent" to="." method="_on_inventory_component_inventory_item_changed"]

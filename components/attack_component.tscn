@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://fgh21fr1maed"]
+
+[ext_resource type="Script" path="res://scripts/AttackComponent.gd" id="1_sqf8o"]
+
+[node name="AttackComponent" type="Area2D"]
+monitorable = false
+script = ExtResource("1_sqf8o")
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]

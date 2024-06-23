@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://c3dmk61v4k7u8"]
+
+[ext_resource type="Texture2D" uid="uid://b2qjcmn3ohe1t" path="res://addons/Tiny Swords/UI/Banners/Banner_Horizontal.png" id="1_jwwte"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_0bijb"]
+texture = ExtResource("1_jwwte")
+texture_margin_left = 32.0
+texture_margin_top = 16.0
+texture_margin_right = 32.0
+texture_margin_bottom = 40.0
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 2
+region_rect = Rect2(32, 48, 128, 120)
+
+[node name="Banner" type="Panel"]
+offset_right = 196.0
+offset_bottom = 150.0
+theme_override_styles/panel = SubResource("StyleBoxTexture_0bijb")

@@ -1,43 +1,56 @@
-[gd_scene load_steps=7 format=3 uid="uid://rbd1m2m4aihw"]
+[gd_scene load_steps=10 format=3 uid="uid://rbd1m2m4aihw"]
 
-[ext_resource type="Script" path="res://actors/torch_goblin.gd" id="1_3cy50"]
-[ext_resource type="PackedScene" uid="uid://4yxgwug2ul81" path="res://actors/torch_goblin_sprite.tscn" id="1_wm3sr"]
-[ext_resource type="Script" path="res://scripts/hurt_box.gd" id="3_dtx6v"]
+[ext_resource type="Script" path="res://scripts/TorchGoblin.gd" id="1_kua7u"]
+[ext_resource type="PackedScene" uid="uid://b5ibkxo0gtusj" path="res://objects/pickups/pickup_meat.tscn" id="2_jpjls"]
+[ext_resource type="PackedScene" uid="uid://4yxgwug2ul81" path="res://scenes/torch_goblin_sprite.tscn" id="2_nf65x"]
+[ext_resource type="Script" path="res://scripts/HealthComponent.gd" id="3_xr1av"]
+[ext_resource type="PackedScene" uid="uid://vbu0jy7dvl7p" path="res://components/hurt_box_component.tscn" id="4_iomgr"]
+[ext_resource type="PackedScene" uid="uid://fgh21fr1maed" path="res://components/attack_component.tscn" id="5_dpteo"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ibofb"]
+radius = 18.0
+height = 72.0
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_46f26"]
-radius = 20.0
-height = 68.0
+radius = 36.0
+height = 76.0
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_amgs3"]
-radius = 41.5933
+[sub_resource type="CircleShape2D" id="CircleShape2D_2v1kt"]
+radius = 46.1736
 
-[node name="TorchGoblin" type="CharacterBody2D"]
-collision_layer = 2
+[node name="TorchGoblin" type="CharacterBody2D" groups=["enemy"]]
 motion_mode = 1
-script = ExtResource("1_3cy50")
+script = ExtResource("1_kua7u")
 speed = 50.0
+drop_table = Array[PackedScene]([ExtResource("2_jpjls")])
+exp_value = 20
 
-[node name="TorchGoblinSprite" parent="." instance=ExtResource("1_wm3sr")]
+[node name="TorchGoblinSprite" parent="." instance=ExtResource("2_nf65x")]
 unique_name_in_owner = true
 position = Vector2(0, -32)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-rotation = -1.57079
+position = Vector2(0, -33)
 shape = SubResource("CapsuleShape2D_ibofb")
 
-[node name="HurtBox" type="Area2D" parent="."]
-script = ExtResource("3_dtx6v")
+[node name="HealthComponent" type="Node" parent="."]
+script = ExtResource("3_xr1av")
+max_health = 10.0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox"]
+[node name="HurtBoxComponent" parent="." node_paths=PackedStringArray("health_component") instance=ExtResource("4_iomgr")]
+health_component = NodePath("../HealthComponent")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBoxComponent"]
 position = Vector2(0, -33)
 shape = SubResource("CapsuleShape2D_46f26")
 
-[node name="AttackRange" type="Area2D" parent="."]
+[node name="AttackComponent" parent="." instance=ExtResource("5_dpteo")]
+damage = 5.0
+is_damage_over_time = true
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackRange"]
-position = Vector2(0, -33)
-shape = SubResource("CircleShape2D_amgs3")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackComponent"]
+position = Vector2(0, -29)
+shape = SubResource("CircleShape2D_2v1kt")
 
-[connection signal="damage_taken" from="HurtBox" to="." method="_on_hurt_box_damage_taken"]
+[connection signal="damage_taken" from="HealthComponent" to="." method="_on_health_component_damage_taken"]
+[connection signal="health_depleted" from="HealthComponent" to="." method="_on_health_component_health_depleted"]
