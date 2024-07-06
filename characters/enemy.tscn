@@ -1,0 +1,67 @@
+[gd_scene load_steps=12 format=3 uid="uid://dqmxprtihsdtc"]
+
+[ext_resource type="Texture2D" uid="uid://bir1pqdlvv81v" path="res://addons/tiny_swords_by_pixel_frog/characters/Torch_Red.png" id="1_5587y"]
+[ext_resource type="Script" path="res://characters/enemy.gd" id="1_tidwi"]
+[ext_resource type="Script" path="res://components/hit_box_component.gd" id="2_jmdvl"]
+[ext_resource type="Script" path="res://components/hurt_box_component.gd" id="3_yler2"]
+[ext_resource type="Script" path="res://components/move_component.gd" id="4_k1fur"]
+[ext_resource type="Script" path="res://components/ai_move_component.gd" id="5_3ep7p"]
+[ext_resource type="Script" path="res://components/health_component.gd" id="6_b7uuc"]
+[ext_resource type="Script" path="res://components/knockback_component.gd" id="8_yhe2c"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_uf4pg"]
+size = Vector2(35, 47)
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_x8oqf"]
+radius = 14.0
+height = 48.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_j16ux"]
+size = Vector2(58, 62)
+
+[node name="Enemy" type="CharacterBody2D" groups=["enemy"]]
+motion_mode = 1
+script = ExtResource("1_tidwi")
+
+[node name="EnemySprite" type="Sprite2D" parent="."]
+position = Vector2(0, -32)
+texture = ExtResource("1_5587y")
+hframes = 7
+vframes = 5
+
+[node name="HitBoxComponent" type="Area2D" parent="."]
+script = ExtResource("2_jmdvl")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitBoxComponent"]
+position = Vector2(1.5, -31.5)
+shape = SubResource("RectangleShape2D_uf4pg")
+debug_color = Color(0.996857, 0, 0.178315, 0.42)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -32)
+shape = SubResource("CapsuleShape2D_x8oqf")
+
+[node name="MoveComponent" type="Node" parent="."]
+script = ExtResource("4_k1fur")
+
+[node name="AiMoveComponent" type="Node" parent="MoveComponent"]
+script = ExtResource("5_3ep7p")
+
+[node name="KnockbackComponent" type="Node" parent="MoveComponent"]
+script = ExtResource("8_yhe2c")
+knockback_recovery = 10.0
+
+[node name="HealthComponent" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("6_b7uuc")
+max_health = 10
+
+[node name="HurtBoxComponent" type="Area2D" parent="HealthComponent" node_paths=PackedStringArray("health_component", "knockback_component")]
+script = ExtResource("3_yler2")
+health_component = NodePath("..")
+knockback_component = NodePath("../../MoveComponent/KnockbackComponent")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HealthComponent/HurtBoxComponent"]
+position = Vector2(0, -32)
+shape = SubResource("RectangleShape2D_j16ux")
+debug_color = Color(0.44666, 0.451583, 1, 0.42)
