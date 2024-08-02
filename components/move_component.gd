@@ -12,11 +12,10 @@ const DECELERATION_TARGET_VELOCITY := Vector2.ZERO
 
 var direction := Vector2.ZERO
 
-var character_node: CharacterBody2D
+@export var character_node: CharacterBody2D
 
 func _ready():
-	character_node = get_parent() as CharacterBody2D
-	assert(character_node, "VelocityComponent must be a child of a CharacterBody2D node in %s." % [str(get_path())])
+	assert(character_node, "MoveComponent must be a child of a CharacterBody2D node in %s." % [str(get_path())])
 
 func _physics_process(_delta: float) -> void:
 	if direction.is_zero_approx():

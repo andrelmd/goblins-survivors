@@ -1,0 +1,31 @@
+[gd_scene load_steps=5 format=3 uid="uid://rq6cbyac8s7d"]
+
+[ext_resource type="Script" path="res://attacks/sword_projectile.gd" id="1_i822q"]
+[ext_resource type="Texture2D" uid="uid://diec7rl728grs" path="res://addons/rogue_like_items_by_@JoeCreates/roguelikeitems.png" id="3_wv6x5"]
+[ext_resource type="Script" path="res://components/hit_box_component.gd" id="4_0txmu"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vpmpm"]
+size = Vector2(15, 6)
+
+[node name="SwordProjectile" type="Node2D" groups=["attack"]]
+script = ExtResource("1_i822q")
+
+[node name="SwordSprite" type="Sprite2D" parent="."]
+position = Vector2(24, 0)
+rotation = 0.785398
+texture = ExtResource("3_wv6x5")
+hframes = 13
+vframes = 15
+frame = 93
+
+[node name="HitBoxComponent" type="Area2D" parent="."]
+collision_layer = 4
+collision_mask = 4
+script = ExtResource("4_0txmu")
+
+[node name="SwordCollision" type="CollisionShape2D" parent="HitBoxComponent"]
+position = Vector2(28, 0)
+shape = SubResource("RectangleShape2D_vpmpm")
+debug_color = Color(0.993314, 0, 0.239431, 0.42)
+
+[connection signal="area_entered" from="HitBoxComponent" to="." method="_on_hit_box_component_area_entered"]

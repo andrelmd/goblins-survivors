@@ -4,17 +4,3 @@
 
 [node name="AttackManager" type="Node2D"]
 script = ExtResource("1_h2nbp")
-
-[node name="AttackTimer" type="Timer" parent="."]
-unique_name_in_owner = true
-one_shot = true
-
-[node name="ReloadTimer" type="Timer" parent="."]
-unique_name_in_owner = true
-one_shot = true
-
-[node name="EntityHolder" type="Node2D" parent="."]
-unique_name_in_owner = true
-
-[connection signal="timeout" from="AttackTimer" to="." method="_on_attack_timer_timeout"]
-[connection signal="timeout" from="ReloadTimer" to="." method="_on_reload_timer_timeout"]

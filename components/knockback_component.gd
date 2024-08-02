@@ -6,16 +6,16 @@ class_name KnockbackComponent
 
 @onready var player = get_tree().get_first_node_in_group("player")
 
-var move_component: MoveComponent
+@export var move_component: MoveComponent
 var knockback: Vector2 = Vector2.ZERO
 
 func _ready():
-	move_component = get_parent() as MoveComponent
 	assert(move_component, "KnockbackComponent must be a child of a MoveComponent node in %s." % [str(get_path())])
 
-func _physics_process(delta):
+func _physics_process(_delta: float):
 	knockback = knockback.move_toward(Vector2.ZERO, knockback_recovery)
+	move_component.direction += knockback
 	
-func take_knockback(knockback_amount: float):
-	move_component.can_move = false
-	knockback += player.global_position.direction_to(move_component.actor.global_position) * knockback_amount
+func take_knockback(knockback_amount:float, knockback_direction: Vector2):
+	knockback = knockback_direction * knockback_amount
+	print("Taken ", knockback, " knockback")

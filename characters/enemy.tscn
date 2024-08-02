@@ -20,6 +20,9 @@ height = 48.0
 size = Vector2(58, 62)
 
 [node name="Enemy" type="CharacterBody2D" groups=["enemy"]]
+position = Vector2(2, 0)
+collision_layer = 4
+collision_mask = 0
 motion_mode = 1
 script = ExtResource("1_tidwi")
 
@@ -41,27 +44,32 @@ debug_color = Color(0.996857, 0, 0.178315, 0.42)
 position = Vector2(0, -32)
 shape = SubResource("CapsuleShape2D_x8oqf")
 
-[node name="MoveComponent" type="Node" parent="."]
+[node name="MoveComponent" type="Node" parent="." node_paths=PackedStringArray("character_node")]
 script = ExtResource("4_k1fur")
-
-[node name="AiMoveComponent" type="Node" parent="MoveComponent"]
-script = ExtResource("5_3ep7p")
-
-[node name="KnockbackComponent" type="Node" parent="MoveComponent"]
-script = ExtResource("8_yhe2c")
-knockback_recovery = 10.0
+character_node = NodePath("..")
 
 [node name="HealthComponent" type="Node" parent="."]
 unique_name_in_owner = true
 script = ExtResource("6_b7uuc")
 max_health = 10
 
-[node name="HurtBoxComponent" type="Area2D" parent="HealthComponent" node_paths=PackedStringArray("health_component", "knockback_component")]
+[node name="HurtBoxComponent" type="Area2D" parent="." node_paths=PackedStringArray("health_component", "knockback_component")]
+collision_layer = 4
+collision_mask = 4
 script = ExtResource("3_yler2")
-health_component = NodePath("..")
-knockback_component = NodePath("../../MoveComponent/KnockbackComponent")
+health_component = NodePath("../HealthComponent")
+knockback_component = NodePath("../KnockbackComponent")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="HealthComponent/HurtBoxComponent"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBoxComponent"]
 position = Vector2(0, -32)
 shape = SubResource("RectangleShape2D_j16ux")
 debug_color = Color(0.44666, 0.451583, 1, 0.42)
+
+[node name="AiMoveComponent" type="Node" parent="." node_paths=PackedStringArray("move_component")]
+script = ExtResource("5_3ep7p")
+move_component = NodePath("../MoveComponent")
+
+[node name="KnockbackComponent" type="Node" parent="." node_paths=PackedStringArray("move_component")]
+script = ExtResource("8_yhe2c")
+knockback_recovery = 10.0
+move_component = NodePath("../MoveComponent")

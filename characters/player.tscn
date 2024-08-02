@@ -1,12 +1,10 @@
-[gd_scene load_steps=10 format=3 uid="uid://nahl1sfs3jnn"]
+[gd_scene load_steps=8 format=3 uid="uid://nahl1sfs3jnn"]
 
 [ext_resource type="Texture2D" uid="uid://cumdic1gfmlh6" path="res://addons/tiny_swords_by_pixel_frog/characters/warrior_blue.png" id="1_gk65c"]
 [ext_resource type="Script" path="res://components/move_component.gd" id="2_cx2cg"]
 [ext_resource type="Script" path="res://components/input_move_component.gd" id="3_pwqla"]
 [ext_resource type="Script" path="res://components/hurt_box_component.gd" id="4_4yrp7"]
 [ext_resource type="PackedScene" uid="uid://cfkebhn0rv8g6" path="res://attacks/attack_manager.tscn" id="5_vcx5x"]
-[ext_resource type="PackedScene" uid="uid://rq6cbyac8s7d" path="res://attacks/sword_attack.tscn" id="6_13lmg"]
-[ext_resource type="Resource" uid="uid://0ah4njohx3t4" path="res://resources/attacks/sword_attack_stats.tres" id="7_pflr8"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4egf0"]
 size = Vector2(28, 46)
@@ -23,18 +21,22 @@ texture = ExtResource("1_gk65c")
 hframes = 6
 vframes = 8
 
-[node name="MoveComponent" type="Node" parent="."]
+[node name="MoveComponent" type="Node" parent="." node_paths=PackedStringArray("character_node")]
 script = ExtResource("2_cx2cg")
 max_speed = 100.0
+character_node = NodePath("..")
 
-[node name="InputMoveComponent" type="Node" parent="MoveComponent"]
+[node name="InputMoveComponent" type="Node" parent="." node_paths=PackedStringArray("move_component")]
 script = ExtResource("3_pwqla")
+move_component = NodePath("../MoveComponent")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, -32)
 shape = SubResource("RectangleShape2D_4egf0")
 
 [node name="HurtBoxComponent" type="Area2D" parent="."]
+collision_layer = 2
+collision_mask = 0
 script = ExtResource("4_4yrp7")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBoxComponent"]
@@ -44,5 +46,3 @@ debug_color = Color(0.44666, 0.451583, 1, 0.42)
 
 [node name="AttackManager" parent="." instance=ExtResource("5_vcx5x")]
 position = Vector2(0, -31)
-attack = ExtResource("6_13lmg")
-attack_stats = ExtResource("7_pflr8")
