@@ -25,6 +25,8 @@ collision_layer = 4
 collision_mask = 0
 motion_mode = 1
 script = ExtResource("1_tidwi")
+max_health = 10
+damage = 5
 
 [node name="EnemySprite" type="Sprite2D" parent="."]
 position = Vector2(0, -32)
@@ -33,6 +35,8 @@ hframes = 7
 vframes = 5
 
 [node name="HitBoxComponent" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 2
 script = ExtResource("2_jmdvl")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitBoxComponent"]
@@ -55,7 +59,7 @@ max_health = 10
 
 [node name="HurtBoxComponent" type="Area2D" parent="." node_paths=PackedStringArray("health_component", "knockback_component")]
 collision_layer = 4
-collision_mask = 4
+collision_mask = 0
 script = ExtResource("3_yler2")
 health_component = NodePath("../HealthComponent")
 knockback_component = NodePath("../KnockbackComponent")
@@ -73,3 +77,5 @@ move_component = NodePath("../MoveComponent")
 script = ExtResource("8_yhe2c")
 knockback_recovery = 10.0
 move_component = NodePath("../MoveComponent")
+
+[connection signal="area_entered" from="HitBoxComponent" to="." method="_on_hit_box_component_area_entered"]

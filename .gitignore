@@ -16,3 +16,6 @@ mono_crash.*.json
 
 # Build-specific ignores
 build/
+
+# Ignore Visual Studio Code project files
+.vscode/

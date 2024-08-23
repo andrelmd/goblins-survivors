@@ -1,0 +1,23 @@
+[gd_scene load_steps=5 format=3 uid="uid://bvic6xhfvtlsb"]
+
+[ext_resource type="Script" path="res://attacks/dagger_attack.gd" id="1_8148d"]
+[ext_resource type="Resource" uid="uid://0ah4njohx3t4" path="res://resources/attacks/sword_attack_stats_1.tres" id="2_1pqdp"]
+[ext_resource type="PackedScene" uid="uid://rq6cbyac8s7d" path="res://attacks/sword_projectile.tscn" id="3_tcoe5"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_q0o8y"]
+
+[node name="DaggerAttack" type="Node2D"]
+script = ExtResource("1_8148d")
+attack_stats = ExtResource("2_1pqdp")
+projectile = ExtResource("3_tcoe5")
+
+[node name="ProjectileHolder" type="Node2D" parent="."]
+
+[node name="CooldownTimer" type="Timer" parent="."]
+
+[node name="Range" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Range"]
+shape = SubResource("CircleShape2D_q0o8y")

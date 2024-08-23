@@ -2,9 +2,14 @@
 
 [ext_resource type="Script" path="res://attacks/rotating_attack.gd" id="1_s6w3p"]
 [ext_resource type="PackedScene" uid="uid://rq6cbyac8s7d" path="res://attacks/sword_projectile.tscn" id="2_3heux"]
-[ext_resource type="Resource" uid="uid://0ah4njohx3t4" path="res://resources/attacks/sword_attack_stats.tres" id="3_ui5h7"]
+[ext_resource type="Resource" uid="uid://0ah4njohx3t4" path="res://resources/attacks/sword_attack_stats_1.tres" id="3_voira"]
 
 [node name="RotatingAttack" type="Node2D"]
 script = ExtResource("1_s6w3p")
 attack = ExtResource("2_3heux")
-attack_stats = ExtResource("3_ui5h7")
+attack_stats = ExtResource("3_voira")
+
+[node name="CooldownTimer" type="Timer" parent="."]
+one_shot = true
+
+[node name="ProjectileHolder" type="Node2D" parent="."]
