@@ -1,0 +1,117 @@
+[gd_scene load_steps=13 format=3 uid="uid://c8rn7574v8anr"]
+
+[ext_resource type="Texture2D" uid="uid://dc64f1grbfsas" path="res://addons/tiny_swords_by_pixel_frog/characters/warrior_blue.png" id="1_fkemm"]
+[ext_resource type="Script" path="res://characters/scripts/player.gd" id="1_rq0ks"]
+[ext_resource type="Script" path="res://components/scripts/move_component.gd" id="2_toi4q"]
+[ext_resource type="Script" path="res://components/scripts/state_machine/state_machine.gd" id="3_oy3rc"]
+[ext_resource type="Script" path="res://components/scripts/state_machine/player_states/idle_player_state.gd" id="4_hj81w"]
+[ext_resource type="Script" path="res://components/scripts/state_machine/player_states/run_player_state.gd" id="5_rvha3"]
+[ext_resource type="Script" path="res://components/scripts/player_brain_component.gd" id="6_p3lu8"]
+
+[sub_resource type="Animation" id="Animation_qilgb"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_2an70"]
+resource_name = "idle"
+length = 0.7
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 0, 1, 2, 3, 4, 5]
+}
+
+[sub_resource type="Animation" id="Animation_npcih"]
+resource_name = "running"
+length = 0.6
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [6, 7, 8, 9, 10, 11]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_131hh"]
+_data = {
+"RESET": SubResource("Animation_qilgb"),
+"idle": SubResource("Animation_2an70"),
+"running": SubResource("Animation_npcih")
+}
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_yt5wr"]
+radius = 18.0
+height = 58.0
+
+[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("state_machine_component", "sprite") groups=["player"]]
+collision_layer = 2
+collision_mask = 5
+motion_mode = 1
+script = ExtResource("1_rq0ks")
+state_machine_component = NodePath("StateMachine")
+sprite = NodePath("KnightSprite")
+
+[node name="KnightSprite" type="Sprite2D" parent="."]
+position = Vector2(0, -33)
+texture = ExtResource("1_fkemm")
+hframes = 6
+vframes = 8
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="KnightSprite"]
+libraries = {
+"": SubResource("AnimationLibrary_131hh")
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-1, -33)
+shape = SubResource("CapsuleShape2D_yt5wr")
+
+[node name="MoveComponent" type="Node" parent="." node_paths=PackedStringArray("actor")]
+script = ExtResource("2_toi4q")
+speed = 128.0
+actor = NodePath("..")
+
+[node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("initial_state", "brain_component")]
+script = ExtResource("3_oy3rc")
+initial_state = NodePath("Idle")
+brain_component = NodePath("../PlayerBrainComponent")
+
+[node name="Idle" type="Node" parent="StateMachine" node_paths=PackedStringArray("move_component", "animation_player")]
+script = ExtResource("4_hj81w")
+move_component = NodePath("../../MoveComponent")
+animation_player = NodePath("../../KnightSprite/AnimationPlayer")
+
+[node name="Run" type="Node" parent="StateMachine" node_paths=PackedStringArray("move_component", "animation_player")]
+script = ExtResource("5_rvha3")
+move_component = NodePath("../../MoveComponent")
+animation_player = NodePath("../../KnightSprite/AnimationPlayer")
+
+[node name="PlayerBrainComponent" type="Node" parent="."]
+script = ExtResource("6_p3lu8")

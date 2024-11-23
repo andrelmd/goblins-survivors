@@ -1,0 +1,138 @@
+[gd_scene load_steps=15 format=3 uid="uid://cu4bskd01kxfd"]
+
+[ext_resource type="Script" path="res://characters/scripts/enemy.gd" id="1_7wagn"]
+[ext_resource type="Texture2D" uid="uid://bf6jy5yrqofxi" path="res://addons/tiny_swords_by_pixel_frog/characters/Torch_Red.png" id="1_divae"]
+[ext_resource type="Script" path="res://components/scripts/state_machine/state_machine.gd" id="2_4ce8w"]
+[ext_resource type="Script" path="res://components/scripts/state_machine/enemy_states/idle_enemy_state.gd" id="3_bpjua"]
+[ext_resource type="Script" path="res://components/scripts/state_machine/enemy_states/run_enemy_state.gd" id="4_6x3wn"]
+[ext_resource type="Script" path="res://components/scripts/state_machine/enemy_states/attack_enemy_state.gd" id="5_0i8g8"]
+[ext_resource type="Script" path="res://components/scripts/enemy_brain_component.gd" id="6_xxeog"]
+[ext_resource type="Script" path="res://components/scripts/move_component.gd" id="7_gde6f"]
+
+[sub_resource type="Animation" id="Animation_ob00n"]
+resource_name = "idle"
+length = 0.7
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5, 6]
+}
+
+[sub_resource type="Animation" id="Animation_4bg1s"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_2doag"]
+resource_name = "running"
+length = 0.6
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [7, 8, 9, 10, 11, 12]
+}
+
+[sub_resource type="Animation" id="Animation_fafdn"]
+resource_name = "attacking"
+length = 0.6
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [14, 15, 16, 17, 18, 19]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_hsfq8"]
+_data = {
+"RESET": SubResource("Animation_4bg1s"),
+"attacking": SubResource("Animation_fafdn"),
+"idle": SubResource("Animation_ob00n"),
+"running": SubResource("Animation_2doag")
+}
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ppdhf"]
+radius = 20.0
+height = 62.0
+
+[node name="Goblin" type="CharacterBody2D" node_paths=PackedStringArray("state_machine_component", "sprite")]
+motion_mode = 1
+script = ExtResource("1_7wagn")
+state_machine_component = NodePath("StateMachine")
+sprite = NodePath("Goblin")
+
+[node name="Goblin" type="Sprite2D" parent="."]
+position = Vector2(0, -33)
+texture = ExtResource("1_divae")
+hframes = 7
+vframes = 5
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Goblin"]
+libraries = {
+"": SubResource("AnimationLibrary_hsfq8")
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -32)
+shape = SubResource("CapsuleShape2D_ppdhf")
+
+[node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("initial_state", "brain_component")]
+script = ExtResource("2_4ce8w")
+initial_state = NodePath("Idle")
+brain_component = NodePath("../EnemyBrainComponent")
+
+[node name="Idle" type="Node" parent="StateMachine" node_paths=PackedStringArray("move_component", "animation_player")]
+script = ExtResource("3_bpjua")
+move_component = NodePath("../../MoveComponent")
+animation_player = NodePath("../../Goblin/AnimationPlayer")
+
+[node name="Run" type="Node" parent="StateMachine" node_paths=PackedStringArray("move_component", "animation_player")]
+script = ExtResource("4_6x3wn")
+move_component = NodePath("../../MoveComponent")
+animation_player = NodePath("../../Goblin/AnimationPlayer")
+
+[node name="Attack" type="Node" parent="StateMachine" node_paths=PackedStringArray("move_component", "animation_player")]
+script = ExtResource("5_0i8g8")
+move_component = NodePath("../../MoveComponent")
+animation_player = NodePath("../../Goblin/AnimationPlayer")
+
+[node name="EnemyBrainComponent" type="Node" parent="."]
+script = ExtResource("6_xxeog")
+
+[node name="MoveComponent" type="Node" parent="." node_paths=PackedStringArray("actor")]
+script = ExtResource("7_gde6f")
+actor = NodePath("..")
