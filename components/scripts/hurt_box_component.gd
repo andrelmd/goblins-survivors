@@ -1,0 +1,1 @@
+class_name HurtBoxComponent extends Area2D

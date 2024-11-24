@@ -1,0 +1,1 @@
+class_name HitBoxComponent extends Area2D

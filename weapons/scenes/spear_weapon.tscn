@@ -1,0 +1,22 @@
+[gd_scene load_steps=5 format=3 uid="uid://csluu5tieyk8p"]
+
+[ext_resource type="Script" path="res://weapons/scripts/weapon.gd" id="1_7e06w"]
+[ext_resource type="PackedScene" uid="uid://dfooxe61vm1hd" path="res://projectiles/scenes/spear.tscn" id="2_yusds"]
+[ext_resource type="Script" path="res://weapons/scripts/Weapon_data.gd" id="3_hojcj"]
+
+[sub_resource type="Resource" id="Resource_x3iaj"]
+script = ExtResource("3_hojcj")
+projectile = ExtResource("2_yusds")
+fire_rate = 0.5
+reload_time = 1.0
+max_ammo = 1
+
+[node name="SpearWeapon" type="Node2D" node_paths=PackedStringArray("fire_rate_timer", "reload_timer")]
+script = ExtResource("1_7e06w")
+weapon_data = SubResource("Resource_x3iaj")
+fire_rate_timer = NodePath("FireRateTimer")
+reload_timer = NodePath("ReloadTimer")
+
+[node name="FireRateTimer" type="Timer" parent="."]
+
+[node name="ReloadTimer" type="Timer" parent="."]
