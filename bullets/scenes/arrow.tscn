@@ -1,0 +1,27 @@
+[gd_scene load_steps=5 format=3 uid="uid://cq0gyrcst1io2"]
+
+[ext_resource type="Script" path="res://bullets/scripts/bullet.gd" id="1_1eqm5"]
+[ext_resource type="PackedScene" uid="uid://b7vn110jtjcbs" path="res://items/scenes/item_icon.tscn" id="3_wdo2c"]
+[ext_resource type="Script" path="res://components/scripts/hit_box_component.gd" id="4_f3rem"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_087yh"]
+size = Vector2(46, 14)
+
+[node name="Arrow" type="Node2D" node_paths=PackedStringArray("hitbox_component")]
+script = ExtResource("1_1eqm5")
+hitbox_component = NodePath("HitBoxComponent")
+speed = 400.0
+
+[node name="ItemIcon" parent="." instance=ExtResource("3_wdo2c")]
+position = Vector2(23, 0)
+frame = 96
+icon_name = 96
+
+[node name="HitBoxComponent" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 4
+script = ExtResource("4_f3rem")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitBoxComponent"]
+position = Vector2(23, 0)
+shape = SubResource("RectangleShape2D_087yh")

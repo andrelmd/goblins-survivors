@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://c8rn7574v8anr"]
+[gd_scene load_steps=14 format=3 uid="uid://c8rn7574v8anr"]
 
 [ext_resource type="Texture2D" uid="uid://dc64f1grbfsas" path="res://addons/tiny_swords_by_pixel_frog/characters/warrior_blue.png" id="1_fkemm"]
 [ext_resource type="Script" path="res://characters/scripts/player.gd" id="1_rq0ks"]
@@ -7,9 +7,7 @@
 [ext_resource type="Script" path="res://components/scripts/state_machine/player_states/idle_player_state.gd" id="4_hj81w"]
 [ext_resource type="Script" path="res://components/scripts/state_machine/player_states/run_player_state.gd" id="5_rvha3"]
 [ext_resource type="Script" path="res://components/scripts/player_brain_component.gd" id="6_p3lu8"]
-[ext_resource type="Script" path="res://components/scripts/weapon_holster_component.gd" id="8_fuh4n"]
-[ext_resource type="Texture2D" uid="uid://2nun6js0mta2" path="res://addons/tiny_swords_by_pixel_frog/pointers/03.png" id="8_oakp7"]
-[ext_resource type="PackedScene" uid="uid://csluu5tieyk8p" path="res://weapons/scenes/spear_weapon.tscn" id="9_7lg4p"]
+[ext_resource type="PackedScene" uid="uid://d37ekw3nmawnp" path="res://weapons/scenes/bow.tscn" id="11_ujnck"]
 
 [sub_resource type="Animation" id="Animation_qilgb"]
 length = 0.001
@@ -98,7 +96,7 @@ shape = SubResource("CapsuleShape2D_yt5wr")
 
 [node name="MoveComponent" type="Node" parent="." node_paths=PackedStringArray("actor")]
 script = ExtResource("2_toi4q")
-speed = 128.0
+speed = 300.0
 actor = NodePath("..")
 
 [node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("initial_state", "brain_component")]
@@ -119,15 +117,7 @@ animation_player = NodePath("../../KnightSprite/AnimationPlayer")
 [node name="PlayerBrainComponent" type="Node" parent="."]
 script = ExtResource("6_p3lu8")
 
-[node name="WeaponHolsterComponent" type="Node2D" parent="." node_paths=PackedStringArray("pivot")]
-script = ExtResource("8_fuh4n")
-pivot = NodePath("Pivot")
-initial_weapons = Array[PackedScene]([ExtResource("9_7lg4p")])
+[node name="Guns" type="Node2D" parent="."]
 
-[node name="Pivot" type="Marker2D" parent="WeaponHolsterComponent"]
-position = Vector2(0, -38)
-
-[node name="Sprite2D" type="Sprite2D" parent="WeaponHolsterComponent/Pivot"]
-position = Vector2(65, 2)
-rotation = 2.18166
-texture = ExtResource("8_oakp7")
+[node name="Bow" parent="Guns" instance=ExtResource("11_ujnck")]
+position = Vector2(0, -33)

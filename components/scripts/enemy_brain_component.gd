@@ -18,7 +18,7 @@ func get_inputs() -> StateData:
 		distance_to_player = move_direction.length()
 		move_direction = move_direction.normalized()
 
-	if distance_to_player < 100:
+	if distance_to_player < 80:
 		inputs.new_state = "Attack"
 		inputs.move_direction = move_direction
 	else:

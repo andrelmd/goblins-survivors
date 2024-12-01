@@ -1,5 +1,6 @@
 class_name AttackEnemyState extends EnemyState
 
+
 var attack_finished = false
 
 func _ready() -> void:

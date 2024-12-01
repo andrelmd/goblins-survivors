@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://cu4bskd01kxfd"]
+[gd_scene load_steps=20 format=3 uid="uid://cu4bskd01kxfd"]
 
 [ext_resource type="Script" path="res://characters/scripts/enemy.gd" id="1_7wagn"]
 [ext_resource type="Texture2D" uid="uid://bf6jy5yrqofxi" path="res://addons/tiny_swords_by_pixel_frog/characters/Torch_Red.png" id="1_divae"]
@@ -10,6 +10,7 @@
 [ext_resource type="Script" path="res://components/scripts/move_component.gd" id="7_gde6f"]
 [ext_resource type="Script" path="res://components/scripts/hit_box_component.gd" id="9_ssrii"]
 [ext_resource type="Script" path="res://components/scripts/hurt_box_component.gd" id="10_pwl4t"]
+[ext_resource type="Script" path="res://components/scripts/health_component.gd" id="11_43r7m"]
 
 [sub_resource type="Animation" id="Animation_4bg1s"]
 length = 0.001
@@ -35,7 +36,7 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [false]
+"values": [true]
 }
 
 [sub_resource type="Animation" id="Animation_fafdn"]
@@ -121,9 +122,11 @@ size = Vector2(36, 71)
 [sub_resource type="CircleShape2D" id="CircleShape2D_8mhcn"]
 radius = 40.1995
 
-[node name="Goblin" type="CharacterBody2D" node_paths=PackedStringArray("state_machine_component", "sprite") groups=["enemy"]]
+[node name="Goblin" type="CharacterBody2D" node_paths=PackedStringArray("hitbox_component", "health_component", "state_machine_component", "sprite") groups=["enemy"]]
 motion_mode = 1
 script = ExtResource("1_7wagn")
+hitbox_component = NodePath("HitBoxComponent")
+health_component = NodePath("HealthComponent")
 state_machine_component = NodePath("StateMachine")
 sprite = NodePath("Goblin")
 
@@ -167,22 +170,30 @@ script = ExtResource("6_xxeog")
 
 [node name="MoveComponent" type="Node" parent="." node_paths=PackedStringArray("actor")]
 script = ExtResource("7_gde6f")
+speed = 200.0
 actor = NodePath("..")
 
 [node name="HitBoxComponent" type="Area2D" parent="."]
+position = Vector2(0, -32)
 collision_layer = 0
 collision_mask = 2
 script = ExtResource("9_ssrii")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitBoxComponent"]
-position = Vector2(65, -29.5)
+position = Vector2(62, 1)
 shape = SubResource("RectangleShape2D_guqsy")
+disabled = true
 
-[node name="HurtBoxComponent" type="Area2D" parent="."]
-collision_layer = 4
+[node name="HurtBoxComponent" type="Area2D" parent="." node_paths=PackedStringArray("health_component")]
+collision_layer = 7
 collision_mask = 0
 script = ExtResource("10_pwl4t")
+health_component = NodePath("../HealthComponent")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBoxComponent"]
 position = Vector2(0, -32)
 shape = SubResource("CircleShape2D_8mhcn")
+
+[node name="HealthComponent" type="Node" parent="." node_paths=PackedStringArray("actor")]
+script = ExtResource("11_43r7m")
+actor = NodePath("..")
